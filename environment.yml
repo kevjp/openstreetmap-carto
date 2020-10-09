@@ -1,0 +1,8 @@
+name: geopy_copy
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - geoplot=0.4.0=py_1
+prefix: /Users/kevinryan/anaconda3/envs/geopy_copy
+

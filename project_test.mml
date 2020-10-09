@@ -2268,6 +2268,7 @@ Layer:
     <<: *extents
     Datasource:
       type: "csv"
-      inline: "agent,wkt\nsample,POINT (-0.1693676999861249 51.66157030001505)\nsample,POINT (-0.1705195999861593 51.66658270001505)\nsupermarket,POINT (-0.1256032 51.63368)\nsupermarket,POINT (-0.1713237 51.6495658)\npark,POINT (-0.1137062 51.6347074)\nhome,POINT (-0.1693677 51.6615703)\nhome,POINT (-0.1705196 51.6665827)"
+      # ${AGENTS}="agent,wkt\nhome,POINT(-0.196017 51.654277)\nshop,POINT(-0.203937 51.655883)"
+      inline: ${AGENTS}
     properties:
       minzoom: 17

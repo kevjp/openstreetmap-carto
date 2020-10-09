@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash --login
 
 # This script is used to start the import of kosmtik containers for the Docker development environment.
 # You can read details about that in DOCKER.md
@@ -64,14 +64,17 @@ kosmtik)
 
   # Starting Kosmtik
   kosmtik -h
-  kosmtik serve project.mml --host 0.0.0.0
-  #kosmtik export project.mml --format 'png' --output tmp/export.png --minZoom 19 --maxZoom 19 --bounds='-0.20476251840591433,51.65462197274702,-0.2002564072608948,51.65611792315079' --width 1680 --height 899
+  #kosmtik serve project.mml --host 0.0.0.0
+  kosmtik export project.mml --format 'png' --output tmp/export.png --minZoom 19 --maxZoom 19 --bounds='-0.20476251840591433,51.65462197274702,-0.2002564072608948,51.65611792315079' --width 1680 --height 899
 
   # It needs Ctrl+C to be interrupted
   ;;
 
 geo_agent)
-  python main.py
+  conda init bash
+  conda activate $ENV_PREFIX
+  echo $CONDA_PREFIX
+  python ./geo_agent/main.py
   ;;
 
 esac

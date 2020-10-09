@@ -1,0 +1,53 @@
+FROM python:3.7
+
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+lsb-release expat libexpat1-dev libboost-dev libboost-program-options-dev libpqxx-dev git-all cmake postgresql-client wget bzip2
+
+ENV HOME /home
+
+ENV CONDA_DIR $HOME/miniconda3
+
+# Miniconda installing
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.sh -O ~/miniconda.sh && \
+    chmod +x ~/miniconda.sh && \
+    ~/miniconda.sh -b -p $CONDA_DIR && \
+    rm ~/miniconda.sh
+
+# Set path to conda
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+RUN echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.profile
+RUN echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.bashrc
+
+
+
+# Style dependencies
+COPY environment_test.yml /tmp/
+RUN ls
+
+
+
+RUN conda update --name base --channel defaults conda && \
+    conda config --add channels conda-forge && \
+    conda config --set channel_priority strict && \
+    conda env create python=3.7 --file /tmp/environment_test.yml --force && \
+    conda clean --all --yes
+
+
+
+# Pull the environment name out of the environment.yml
+RUN echo "source activate $(head -1 /tmp/environment.yml | cut -d' ' -f2)" > ~/.bashrc
+ENV PATH /home/miniconda3/envs/$(head -1 /tmp/environment.yml | cut -d' ' -f2)/bin:$PATH
+
+
+
+# Set bash environment entry requirements for script on docker run
+COPY entrypoint.sh /usr/local/bin/
+# Make bash script executable
+RUN chmod u+x /usr/local/bin/entrypoint.sh
+#ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
+
+
+CMD conda info --envs

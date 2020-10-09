@@ -1,0 +1,54 @@
+{
+    "events" : [
+    {
+        "description" : "weekly_shop",
+        "starttime" : "",
+        "time_at_event" : 0,
+        "time_since_last_event" : 0,
+        "time_before_event_repeat" : 0,
+        "travel_speed" : "",
+        "event_OSM_search_term" : "shop=supermarket",
+        "probability_initialisation_functions" :
+        {
+            "prob_of_event_occuring_distribution" : {"function" : "init_event_occuring"},
+            "start_time_distribution" : {"function" : "init_event_starttime"},
+            "time_period_at_event_distribution" : {"function" : "init_time_spent_at_event"},
+            "time_period_between_events_distribution" : {"function" : "init_time_before_event_occurs_again"}
+        },
+        "probability_sampling_functions" :
+        {
+            "sampling_event_occuring" : {"function" : "determine_event_occurs", "args" : [0], "kwargs" : {"threshold" : 0.1}},
+            "sampling_start_time" : {"function" : "determine_starttime"},
+            "sampling_time_period_at_event" : {"function" : "determine_time_at_event"},
+            "sampling_time_period_before_event_repeat" : {"function" : "determine_time_before_event_repeat"}
+        },
+        "agent_eligibility" : {">=" : [{"var" : "age"}, 18]},
+        "trigger" : true
+    },
+    {
+        "description" : "walk_in_the_park",
+        "starttime" : "",
+        "time_at_event" : 0,
+        "time_since_last_event" : 0,
+        "time_before_event_repeat" : 0,
+        "travel_speed" : "",
+        "event_OSM_search_term" : "leisure=park",
+        "probability_initialisation_functions" :
+        {
+            "prob_of_event_occuring_distribution" : {"function" : "init_event_occuring"},
+            "start_time_distribution" : {"function" : "init_event_starttime"},
+            "time_period_at_event_distribution" : {"function" : "init_time_spent_at_event"},
+            "time_period_between_events_distribution" : {"function" : "init_time_before_event_occurs_again"}
+        },
+        "probability_sampling_functions" :
+        {
+            "sampling_event_occuring" : {"function" : "determine_event_occurs", "args" : [0], "kwargs" : {"threshold" : 0.1}},
+            "sampling_start_time" : {"function" : "determine_starttime"},
+            "sampling_time_period_at_event" : {"function" : "determine_time_at_event"},
+            "sampling_time_period_before_event_repeat" : {"function" : "determine_time_before_event_repeat"}
+        },
+        "agent_eligibility" : {">=" : [{"var" : "age"}, 18]},
+        "trigger" : {">" : [{"var" : "infected"}, 0.1]}
+    }
+    ]
+}

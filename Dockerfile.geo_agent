@@ -1,0 +1,62 @@
+FROM python:3.7
+
+# RUN mkdir -p /geo_agent
+
+# WORKDIR /geo_agent
+# RUN ls
+
+# Copy geo_agent library folder
+COPY . .
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+lsb-release expat libexpat1-dev libboost-dev libboost-program-options-dev libpqxx-dev git-all cmake postgresql-client wget bzip2
+
+RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+# Anaconda installing
+RUN wget https://repo.continuum.io/archive/Anaconda3-2020.07-Linux-x86_64.sh
+RUN bash Anaconda3-2020.07-Linux-x86_64.sh -b
+RUN rm Anaconda3-2020.07-Linux-x86_64.sh
+
+# Set path to conda
+ENV PATH /root/anaconda3/bin:$PATH
+
+# Updating Anaconda packages
+RUN conda update conda
+RUN conda update anaconda
+RUN conda update --all
+
+
+
+RUN ls
+
+# Style dependencies
+COPY environment.yml requirements.txt /tmp/
+RUN ls
+
+RUN pip install --requirement /tmp/requirements.txt
+
+RUN python setup.py build_ext --inplace
+
+
+# build the conda environment
+
+COPY environment.yml /tmp/
+ENV ENV_PREFIX $PWD/env
+RUN conda env create --prefix $ENV_PREFIX --file /tmp/environment.yml --force
+
+# Set bash environment entry requirements for script on docker run
+COPY entrypoint.sh /usr/local/bin/
+# Make bash script executable
+RUN chmod u+x /usr/local/bin/entrypoint.sh
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
+CMD bash docker-startup_geo_agent.sh geo_agent
+
+
+
+
+
+
+
+# CMD [ "python", "./main.py" ]

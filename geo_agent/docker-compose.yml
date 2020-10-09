@@ -1,4 +1,4 @@
-version: '3.2'
+version: '2'
 services:
   kosmtik:
     image: kosmtik:v1
@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile.db
     ports:
-      - "127.0.0.1:5433:5432"
+      - "127.0.0.1:5432:5432"
     environment:
       - PG_WORK_MEM
       - PG_MAINTENANCE_WORK_MEM
@@ -45,7 +45,7 @@ services:
     image: postgresql_krls:latest
     build:
       context: .
-      dockerfile: Dockerfile.pgrouting_v2
+      dockerfile: Dockerfile.pgrouting
     volumes:
       - .:/openstreetmap-carto
     ports:
@@ -61,7 +61,7 @@ services:
     image: geo_agent:v1
     build:
       context: .
-      dockerfile: ./geo_agent/Dockerfile.geo_agent
+      dockerfile: Dockerfile.geo_agent
     volumes:
       - .:/openstreetmap-carto
     depends_on:
@@ -82,5 +82,3 @@ services:
     volumes:
       - .:/openstreetmap-carto
 
-volumes:
-  agent_locations:

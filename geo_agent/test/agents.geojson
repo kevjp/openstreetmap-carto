@@ -1,0 +1,7 @@
+{"type": "FeatureCollection", "features": [
+    {"type": "Feature","properties": {"id":"1","name":"Beech Hill Av"},"geometry": {"type": "Point","coordinates": [-0.173571,51.666207]}},
+    {"type": "Feature","properties": {"id":"2","name":"Wood Ride"},"geometry": {"type": "Point","coordinates": [-0.170535,51.666607]}},
+    {"type": "Feature","properties": {"id":"3","name":"Broadgates Av"},"geometry": {"type": "Point","coordinates": [-0.182378,51.664420]}},
+    {"type": "Feature","properties": {"id":"4","name":"Burwood Pl"},"geometry": {"type": "Point","coordinates": [-0.179455,51.665241]}}
+ ]
+}

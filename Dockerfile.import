@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 ADD openstreetmap-carto.style /
 
 RUN mkdir -p /openstreetmap-carto
+RUN mkdir -p /agent_locations
 WORKDIR /openstreetmap-carto
 
-CMD sh scripts/docker-startup.sh import
+
+CMD sh scripts/docker-startup_geo_agent.sh import

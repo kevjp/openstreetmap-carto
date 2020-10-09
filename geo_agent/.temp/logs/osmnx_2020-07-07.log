@@ -1,0 +1,104 @@
+2020-07-07 00:09:37,512 INFO osmnx Configured osmnx
+2020-07-07 00:09:50,013 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:50,047 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:09:50,047 INFO osmnx Created bounding box 3000 meters in each direction from (51.66176239080847, -0.1687473308241547): 51.68870378556595,51.634820832714254,-0.12542819071326866,-0.21206908896773716
+2020-07-07 00:09:50,231 INFO osmnx Pausing 0 seconds before making HTTP POST request
+2020-07-07 00:09:50,231 INFO osmnx Post http://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A180%5D%3B%28%28node%5B%22shop%22%3D%22supermarket%22%5D%2851.634821%2C-0.212069%2C51.688704%2C-0.125428%29%3B%28._%3B%3E%3B%29%3B%29%3B%28way%5B%22shop%22%3D%22supermarket%22%5D%2851.634821%2C-0.212069%2C51.688704%2C-0.125428%29%3B%28._%3B%3E%3B%29%3B%29%3B%28relation%5B%22shop%22%3D%22supermarket%22%5D%2851.634821%2C-0.212069%2C51.688704%2C-0.125428%29%3B%28._%3B%3E%3B%29%3B%29%3B%29%3Bout%3B with timeout=180
+2020-07-07 00:09:50,491 INFO osmnx Downloaded 5.7KB from overpass-api.de
+2020-07-07 00:09:50,492 INFO osmnx Saved response to cache file ".temp/cache/2556f0ad1cdf74aba72d19deafed2b3d.json"
+2020-07-07 00:09:50,559 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:50,596 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:50,643 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:09:54,122 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:54,160 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:09:54,160 INFO osmnx Created bounding box 3000 meters in each direction from (51.66176239080847, -0.1687473308241547): 51.68870378556595,51.634820832714254,-0.12542819071326866,-0.21206908896773716
+2020-07-07 00:09:54,161 INFO osmnx Retrieved response from cache file ".temp/cache/2556f0ad1cdf74aba72d19deafed2b3d.json"
+2020-07-07 00:09:54,219 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:54,256 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:54,292 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:09:55,565 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:55,605 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:09:55,605 INFO osmnx Created bounding box 3000 meters in each direction from (51.66176239080847, -0.1687473308241547): 51.68870378556595,51.634820832714254,-0.12542819071326866,-0.21206908896773716
+2020-07-07 00:09:55,606 INFO osmnx Retrieved response from cache file ".temp/cache/2556f0ad1cdf74aba72d19deafed2b3d.json"
+2020-07-07 00:09:55,664 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:55,702 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:09:55,739 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:35,657 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:35,695 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:35,695 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:10:35,836 INFO osmnx Pausing 0 seconds before making HTTP POST request
+2020-07-07 00:10:35,837 INFO osmnx Post http://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A180%5D%3B%28%28node%5B%22shop%22%3D%22supermarket%22%5D%2851.639467%2C-0.213431%2C51.693350%2C-0.126781%29%3B%28._%3B%3E%3B%29%3B%29%3B%28way%5B%22shop%22%3D%22supermarket%22%5D%2851.639467%2C-0.213431%2C51.693350%2C-0.126781%29%3B%28._%3B%3E%3B%29%3B%29%3B%28relation%5B%22shop%22%3D%22supermarket%22%5D%2851.639467%2C-0.213431%2C51.693350%2C-0.126781%29%3B%28._%3B%3E%3B%29%3B%29%3B%29%3Bout%3B with timeout=180
+2020-07-07 00:10:36,887 INFO osmnx Downloaded 4.9KB from overpass-api.de
+2020-07-07 00:10:36,888 INFO osmnx Saved response to cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:10:36,953 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:36,992 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:37,030 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:39,090 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:39,124 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:39,124 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:10:39,125 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:10:39,180 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:39,216 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:39,252 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:41,343 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:41,377 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:41,378 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:10:41,379 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:10:41,433 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:41,470 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:41,506 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:58,134 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:58,173 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:10:58,174 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:10:58,175 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:10:58,235 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:58,272 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:10:58,311 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:28:54,771 INFO osmnx Configured osmnx
+2020-07-07 00:28:54,830 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:28:54,872 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:28:54,873 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:28:54,876 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:28:54,939 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:28:54,976 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:28:55,015 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:01,440 INFO osmnx Configured osmnx
+2020-07-07 00:29:01,488 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:01,532 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:01,533 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:29:01,534 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:29:01,595 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:01,633 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:01,672 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:08,361 INFO osmnx Configured osmnx
+2020-07-07 00:29:08,411 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:08,456 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:08,456 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:29:08,457 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:29:08,517 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:08,556 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:08,592 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:24,103 INFO osmnx Configured osmnx
+2020-07-07 00:29:24,142 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:24,179 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:29:24,180 INFO osmnx Created bounding box 3000 meters in each direction from (51.66640906799022, -0.1701042675829159): 51.693350472920145,51.63946749975909,-0.1267806447830694,-0.2134305078273411
+2020-07-07 00:29:24,181 INFO osmnx Retrieved response from cache file ".temp/cache/d5d667f4feb216c10bb152709c5e4dc2.json"
+2020-07-07 00:29:24,237 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:24,274 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:29:24,311 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:30:18,972 INFO osmnx Configured osmnx
+2020-07-07 00:30:19,023 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:19,068 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:30:19,069 INFO osmnx Created bounding box 3000 meters in each direction from (51.66176239080847, -0.1687473308241547): 51.68870378556595,51.634820832714254,-0.12542819071326866,-0.21206908896773716
+2020-07-07 00:30:19,076 INFO osmnx Retrieved response from cache file ".temp/cache/2556f0ad1cdf74aba72d19deafed2b3d.json"
+2020-07-07 00:30:19,142 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:19,180 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:19,219 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:30:23,853 INFO osmnx Configured osmnx
+2020-07-07 00:30:23,904 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:23,950 INFO osmnx Projected GeoDataFrame to epsg:4326
+2020-07-07 00:30:23,951 INFO osmnx Created bounding box 3000 meters in each direction from (51.66176239080847, -0.1687473308241547): 51.68870378556595,51.634820832714254,-0.12542819071326866,-0.21206908896773716
+2020-07-07 00:30:23,952 INFO osmnx Retrieved response from cache file ".temp/cache/2556f0ad1cdf74aba72d19deafed2b3d.json"
+2020-07-07 00:30:24,015 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:24,053 INFO osmnx Projected GeoDataFrame to +proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +type=crs
+2020-07-07 00:30:24,092 INFO osmnx Projected GeoDataFrame to epsg:4326
