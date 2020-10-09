@@ -1,0 +1,124 @@
+FROM python:3.7
+
+# RUN mkdir -p /geo_agent
+
+# WORKDIR /geo_agent
+
+RUN ls
+
+SHELL [ "/bin/bash", "--login", "-c" ]
+
+# Copy geo_agent library folder
+COPY . .
+
+
+
+RUN ls
+WORKDIR /geo_agent
+RUN ls
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+lsb-release expat libexpat1-dev libboost-dev libboost-program-options-dev libpqxx-dev git-all cmake postgresql-client wget bzip2 libgeos-dev vim
+
+RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+ENV HOME /home
+
+ENV CONDA_DIR $HOME/miniconda3
+
+# Miniconda installing
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.sh -O ~/miniconda.sh && \
+    chmod +x ~/miniconda.sh && \
+    ~/miniconda.sh -b -p $CONDA_DIR && \
+    rm ~/miniconda.sh
+
+# RUN wget https://repo.continuum.io/archive/Anaconda3-2020.07-Linux-x86_64.sh
+# RUN bash Anaconda3-2020.07-Linux-x86_64.sh -b
+# RUN rm Anaconda3-2020.07-Linux-x86_64.sh
+
+# Set path to conda
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+RUN echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.profile
+RUN echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.bashrc
+
+# Updating Anaconda packages
+# RUN conda update conda
+# RUN conda update anaconda
+# RUN conda update --all
+RUN conda init bash
+
+
+# Style dependencies
+COPY ./geo_agent/environment.yml ./geo_agent/requirements.txt /tmp/
+RUN ls
+
+
+
+
+# build the conda environment
+ENV ENV_PREFIX $PWD/env
+# RUN conda env create --prefix $ENV_PREFIX --file /tmp/environment.yml --force
+
+
+RUN conda update --name base --channel defaults conda && \
+    conda config --add channels conda-forge && \
+    conda config --set channel_priority strict && \
+    conda env create python=3.7 --file /tmp/environment.yml --force && \
+    conda clean --all --yes
+
+
+
+    # Pull the environment name out of the environment.yml
+RUN echo "source activate $(head -1 /tmp/environment.yml | cut -d' ' -f2)" > ~/.bashrc
+ENV PATH /home/miniconda3/envs/$(head -1 /tmp/environment.yml | cut -d' ' -f2)/bin:$PATH
+
+
+WORKDIR /geo_agent
+RUN conda init bash && \
+    conda activate $(head -1 /tmp/environment.yml | cut -d' ' -f2) && \
+    python setup.py build_ext --inplace
+
+
+
+RUN /home/miniconda3/envs/geopy_copy/bin/pip install git+https://github.com/qubitdigital/json-logic-py.git
+
+RUN /home/miniconda3/envs/geopy_copy/bin/pip uninstall shapely --yes; /home/miniconda3/envs/geopy_copy/bin/pip install --no-binary :all: shapely
+
+# RUN $ENV_PREFIX/bin/pip install --requirement /tmp/requirements.txt
+
+
+
+    # --file /tmp/environment.yml --force && \
+    # conda clean --all --yes
+
+RUN mkdir -p /openstreetmap-carto
+
+
+# Set bash environment entry requirements for script on docker run
+COPY /geo_agent/entrypoint.sh /usr/local/bin/
+# Make bash script executable
+RUN chmod u+x /usr/local/bin/entrypoint.sh
+
+
+# CMD python setup.py build_ext --inplace
+
+# CMD ls
+#CMD conda info --envs
+
+WORKDIR /geo_agent
+
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
+# CMD ["/bin/bash"]
+CMD /home/miniconda3/envs/geopy_copy/bin/python main.py
+# CMD bash docker-startup_geo_agent.sh geo_agent
+
+
+
+
+
+
+
+# CMD [ "python", "./main.py" ]

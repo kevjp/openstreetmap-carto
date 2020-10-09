@@ -1,0 +1,98 @@
+FROM ubuntu:18.04
+
+# see https://docs.pgrouting.org/3.1/en/pgRouting-installation.html for details
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+RUN apt-get update && apt-get install -y tzdata software-properties-common postgresql-10 postgresql-server-dev-10 postgresql-10-postgis-2.4 cmake g++  libboost-graph-dev python-sphinx texlive doxygen libtap-parser-sourcehandler-pgtap-perl postgresql-10-pgtap libcgal-dev
+
+RUN apt-get update
+
+RUN apt-get install --no-install-recommends -y wget lsb-release git-all build-essential expat libexpat1-dev libboost-dev libboost-program-options-dev    libpqxx-dev vim
+
+RUN apt-get update
+
+# build pgrouting installation
+RUN git clone git://github.com/pgRouting/pgrouting.git
+WORKDIR /pgrouting
+RUN git checkout v2.6.3
+RUN mkdir build
+WORKDIR /pgrouting/build
+RUN cmake  ..
+RUN make
+RUN make install
+
+# build osm2pgrouting installation
+WORKDIR /
+
+RUN git clone https://github.com/pgRouting/osm2pgrouting.git
+
+WORKDIR /osm2pgrouting
+
+RUN ls
+
+RUN cmake -H. -Bbuild
+
+WORKDIR /osm2pgrouting/build
+
+RUN make
+
+RUN make install
+
+
+
+
+# Run the rest of the commands as the ``docker`` user created by the ``postgres-12`` package when it was ``apt-get installed``
+USER postgres
+
+# Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
+# then create a database `docker` owned by the ``docker`` role.
+# Note: here we use ``&&\`` to run commands one after the other - the ``\``
+#       allows the RUN command to span multiple lines.
+RUN    /etc/init.d/postgresql start &&\
+    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
+    createdb -O docker docker
+
+RUN /etc/init.d/postgresql start &&\
+ createdb routing &&\
+ psql --dbname routing -c 'CREATE EXTENSION postgis' &&\
+ psql --dbname routing -c 'CREATE EXTENSION pgRouting' &&\
+ psql --dbname routing -c 'CREATE EXTENSION hstore'
+
+WORKDIR /home
+RUN ls
+
+COPY . .
+
+WORKDIR /openstreetmap-carto
+
+ADD ./scripts/tune-postgis.sh /docker-entrypoint-initdb.d
+
+RUN ls
+
+
+COPY mapconfig_shops_parks.xml .
+COPY greater-london-latest.osm .
+
+ RUN /etc/init.d/postgresql start &&\
+ osm2pgrouting --file greater-london-latest.osm --conf mapconfig_shops_parks.xml --dbname routing --username docker --password docker --clean --attributes --addnodes --tag
+
+RUN ls /etc/postgresql/
+
+# Adjust PostgreSQL configuration so that remote connections to the
+# database are possible.
+
+
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/10/main/pg_hba.conf
+
+# And add ``listen_addresses`` to ``$POSTGRES_CONFIG/postgresql.conf``
+RUN echo "listen_addresses='*'" >> /etc/postgresql/10/main/postgresql.conf
+
+# Expose the PostgreSQL port
+EXPOSE 5432
+
+# Add VOLUMEs to allow backup of config, logs and databases
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+
+
+# Set the default command to run when starting the container
+CMD ["/usr/lib/postgresql/10/bin/postgres", "-D", "/var/lib/postgresql/10/main", "-c", "config_file=/etc/postgresql/10/main/postgresql.conf"]
