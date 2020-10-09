@@ -1,0 +1,79 @@
+{
+    "events" : [
+    {
+        "description" : "weekly_shop",
+        "starttime" : "",
+        "time_at_event" : 0,
+        "time_since_last_event" : 0,
+        "time_before_event_repeat" : 0,
+        "travel_speed" : "",
+        "event_OSM_search_term" : "shop=supermarket",
+        "probability_initialisation_functions" :
+        {
+            "prob_of_event_occuring_distribution" : {"function" : "init_event_occuring"},
+            "start_time_distribution" : {"function" : "init_event_starttime"},
+            "time_period_at_event_distribution" : {"function" : "init_time_spent_at_event"},
+            "time_period_between_events_distribution" : {"function" : "init_time_before_event_occurs_again"}
+        },
+        "probability_sampling_functions" :
+        {
+            "sampling_event_occuring" : {"function" : "determine_event_occurs", "args" : [0], "kwargs" : {"threshold" : 0.1}},
+            "sampling_start_time" : {"function" : "determine_starttime"},
+            "sampling_time_period_at_event" : {"function" : "determine_time_at_event"},
+            "sampling_time_period_before_event_repeat" : {"function" : "determine_time_before_event_repeat"}
+        },
+        "agent_eligibility" : {">=" : [{"var" : "age"}, 18]},
+        "trigger" : true
+    },
+    {
+        "description" : "walk_in_the_park",
+        "starttime" : "",
+        "time_at_event" : 0,
+        "time_since_last_event" : 0,
+        "time_before_event_repeat" : 0,
+        "travel_speed" : "",
+        "event_OSM_search_term" : "leisure=park",
+        "probability_initialisation_functions" :
+        {
+            "prob_of_event_occuring_distribution" : {"function" : "init_event_occuring"},
+            "start_time_distribution" : {"function" : "init_event_starttime"},
+            "time_period_at_event_distribution" : {"function" : "init_time_spent_at_event"},
+            "time_period_between_events_distribution" : {"function" : "init_time_before_event_occurs_again"}
+        },
+        "probability_sampling_functions" :
+        {
+            "sampling_event_occuring" : {"function" : "determine_event_occurs", "args" : [0], "kwargs" : {"threshold" : 0.1}},
+            "sampling_start_time" : {"function" : "determine_starttime"},
+            "sampling_time_period_at_event" : {"function" : "determine_time_at_event"},
+            "sampling_time_period_before_event_repeat" : {"function" : "determine_time_before_event_repeat"}
+        },
+        "agent_eligibility" : {">=" : [{"var" : "age"}, 18]},
+        "trigger" : true
+    }
+    ],
+
+    "infection_criteria" : [
+    {
+        "infection_radius" : 2,
+        "time_before_diagnosis" : {"function" : "time_before_diagnosis"},
+        "isolation_adherence" : 0.8,
+        "infect" : {"function" : "infect"},
+        "infectiousness" : {"function" : "infectiousness"},
+        "disease_progression" : {"function" : "disease_progression"},
+        "disease_attributes" : {"tstep_dist_recovery_mild" : {"function" : "tstep_recovery_from_mild"},
+                                "tstep_dist_recovery_hospitalized" : {"function" : "tstep_dist_recovery_hospitalized"},
+                                "tstep_dist_recovery_ventilation" : {"function" : "tstep_dist_recovery_ventilation"},
+                                "tstep_dist_dead_post_ventialtion" : {"function" : "tstep_dist_dead_post_ventialtion"},
+                                "prob_asymptomatic" : 0.2, // https://www.cebm.net/covid-19/covid-19-what-proportion-are-asymptomatic/#:~:text=estimate%20that%20people%20who%20had,of%20the%20cases%20they%20studied.&text=median%20age%20of%20asymptomatic%20carriers,students%2C%20aged%20%3C20%20years.&text=50%25%20of%20the%20people%20who%20tested%20positive%20had%20no%20symptoms.%E2%80%9D
+                                "prob_hospitalisation" : 0.1, // will need a age stratified distribution in future versions
+                                "prob_dist"
+                                "prob_ventilation_given_hospitalised" : 0.5, // https://www.cdc.gov/mmwr/volumes/69/wr/pdfs/mm6918e1-H.pdf?deliveryName=USCDC_921-DM26922
+                                "prob_dead_ventilated" : 0.5}
+
+
+
+    }
+
+
+    ]
+}
