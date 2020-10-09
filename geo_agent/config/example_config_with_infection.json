@@ -64,9 +64,9 @@
                                 "tstep_dist_recovery_hospitalized" : {"function" : "tstep_dist_recovery_hospitalized"},
                                 "tstep_dist_recovery_ventilation" : {"function" : "tstep_dist_recovery_ventilation"},
                                 "tstep_dist_dead_post_ventialtion" : {"function" : "tstep_dist_dead_post_ventialtion"},
-                                "prob_asymptomatic" : 0.2, // https://www.cebm.net/covid-19/covid-19-what-proportion-are-asymptomatic/#:~:text=estimate%20that%20people%20who%20had,of%20the%20cases%20they%20studied.&text=median%20age%20of%20asymptomatic%20carriers,students%2C%20aged%20%3C20%20years.&text=50%25%20of%20the%20people%20who%20tested%20positive%20had%20no%20symptoms.%E2%80%9D
-                                "prob_hospitalisation" : 0.1, // will need a age stratified distribution in future versions
-                                "prob_ventilation_given_hospitalised" : 0.5, // https://www.cdc.gov/mmwr/volumes/69/wr/pdfs/mm6918e1-H.pdf?deliveryName=USCDC_921-DM26922
+                                "prob_asymptomatic" : 0.2,
+                                "prob_hospitalisation" : 0.1,
+                                "prob_ventilation_given_hospitalised" : 0.5,
                                 "prob_dead_ventilated" : 0.5}
 
 
