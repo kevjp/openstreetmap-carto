@@ -18,6 +18,7 @@ dependencies:
     - geopandas==0.8.1
     - geopy==2.0.0
     - jmespath==0.9.4
+    - libpysal==4.3.0
     - matplotlib==3.2.1
     - munch==2.5.0
     - numpy==1.19.1

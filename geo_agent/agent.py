@@ -12,9 +12,8 @@ class Agent():
     id : int (unique value)
     subpop_id : int
     osm_ways_ref : int
-    current_state : int (0=healthy, 1 = sick, 2 = imune, 3 = dead, 4 = immune but infectious)
+    current_state : int (0=healthy, 1 = infected, 2 = recovered, 3 = dead)
     age : int
-    infected_since : int (frame the agent got infected)
     recovery_vector : vector (used to determine if someone recovers or dies)
     in_treatment : int (0= No, 1= Yes)
     current_events : dictionary of current class event instances
@@ -28,13 +27,17 @@ class Agent():
 
     def __init__(self, row, id):
 
-        self.headers = ['id', 'subpop_id', 'osm_ways_id', 'lat', 'lon', 'age', 'current_state', 'infected_since', 'recovery_vector', 'in_treatment', 'current_events', 'travelling', 'event_description_string']
+        self.headers = ['id', 'subpop_id', 'osm_ways_id', 'lat', 'lon', 'utm_x', 'utm_y', 'age', 'current_state', 'recovery_vector']
         self.__dict__ = dict(zip(self.headers, row))
         self.the_id = id
         self.current_events = {}
+        self.current_infections = {}
         self.event_description_string = {}
         self.current_lat = row[3] # lat column
         self.current_lon = row[4] # lon column
+        # initialise all agents disease_progression_state to None and at each tstep update state depending on current disease progression as defined by Infection().disease_timer function
+        # available values are string values "asymptomatic", "mild", "hospitalised", "ventialted", "dead"
+        self.disease_progression_state = None
         self.tracker_instance = None
 
 
@@ -75,6 +78,49 @@ class Agent():
                 self.current_events[key] = copy.deepcopy(event_instance)
 
 
+    def attach_infection_obj(self, infection_config_obj):
+        """
+        Attach infection instance object to any newly infected agents
+        # see initialise_infection() in main.py for the structure of infection_config_obj
+        """
+        # instatiate each agent with asymptomatic disease state. This may change depending on disease progression for each agent
+
+        for key, infection in infection_config_obj.items():
+            # extract infection eligibility
+            infection_eligibility_obj = infection_config_obj[key].agent_eligibility
+            infection_instance = infection_config_obj[key]
+
+            # attach infection instance only to infected agents
+            if jsonLogic(infection_eligibility_obj, self.__dict__):
+                # deepcopy instance to agent instance if agent is eligible (i.e. has been infected)
+                self.current_infections[key] = copy.deepcopy(infection_instance)
+
+
+    def infection_update(self,infection_json_obj):
+        """
+        update the infection instance attached to each agent
+        """
+        for infection in infection_json_obj["infection_criteria"]:
+            # check if agent is infected only agents which are infected will have an infection class instance listed in self.current_infections
+            if infection["description"] in self.current_infections:
+                # define disease progress for agent
+                # reset args and kwargs variables
+                args, kwargs = [], {}
+                # retrieve disease_progression function
+                func = infection["disease_progression"]["function"]   # retrieve function name
+                # retrieve args for disease_progression function
+                args = infection["timer_objects"]
+
+                # Retrieve function from class instance
+                func = getattr(self.current_infections[infection["description"]], func)
+                # Run disease progression function
+                func(*args, **kwargs)
+
+
+
+
+
+
     def update_time_b4_event_repeat(self):
         """
         updates event instance variable time_before_event_repeat
@@ -105,6 +151,8 @@ class Agent():
 
                     func = getattr(self.current_events[event["description"]], func)
                     func(*args, **kwargs)
+
+
 
 
 

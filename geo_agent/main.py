@@ -3,6 +3,7 @@
 from subpopulations import Load_populations
 from agent import Agent
 from event import Event, add_method
+from infection import Infection
 import json
 import copy
 from tracker import Tracker
@@ -11,13 +12,14 @@ import os
 from clock import Clock
 from visualiser_geo import build_fig_geo, set_style, draw_tstep, parse_agent_location, parse_yaml_result
 import time
+import numpy as np
 
 
 
 
 class Simulation():
 
-    def read_in_event_config(self, json_file = "./config/example_config.json"):
+    def read_in_event_config(self, json_file = "./config/example_config_with_infection.json"):
         # open json config file
         f = open(json_file)
         self.event_json = json.load(f)
@@ -83,6 +85,36 @@ class Simulation():
             # update event_config_obj dictionary with Event class instance
             self.event_config_obj[event["class_instance"].description] = event["class_instance"]
 
+    def initialise_infection(self):
+
+        """
+        Initialise infection instance which can be attached to each agent
+        """
+        self.infection_obj = {} # holds infection class instance
+        infection_index = 0
+        for infection in self.event_json["infection_criteria"]:
+            # initialise infection status equal to healthy
+            infection["status"] = "healthy"
+            # instantiate Infection class
+            infection["class_instance"] = Infection()
+            # generate unique numerical index value for each event class
+            infection["index"] = infection_index
+            infection_index += 1
+
+            # generate distributions for the number of days in each infection state for each disease as defined in config infection_criteria dictionary
+            # Need to iterate over time_objects list
+            # Initialises all distributions for days in each state (infection.<state>_days_in_state where for COVID <state> equals either aymptomatic, mild, hospitalised, ventilated or death)
+            for state in infection["timer_objects"]:
+                if "days_in_state" in state.keys():
+                    func = getattr(infection["class_instance"], state["days_in_state"]["function"])
+                    kwargs = state["days_in_state"]["kwargs"]
+                    infection_class_att = state["state"] + "_days_in_state"
+                    infection[infection_class_att] = func(**kwargs)
+            # update infection class with variables from config
+            vars(infection["class_instance"]).update(infection)
+
+            # update infection_obj dictionary with Infection class instance
+            self.infection_obj[infection["class_instance"].description] = infection["class_instance"]
 
 
 
@@ -107,7 +139,7 @@ class Simulation():
 
 
     def initialise_simulation(self, household_data = './data/barnet_points_19.csv', \
-        config_file = './config/example_config.json'):
+        config_file = './config/example_config_with_infection.json'):
 
         """
         Function to initialise the simulation. This will involve loading config files
@@ -121,7 +153,9 @@ class Simulation():
 
         # instantiate agent instances based on numpy array
         self.agents = [Agent(self.pop_config.sub_population[i,:], "agent_{}".format(i+1)) for i in range(self.pop_config.pop_size)]
-        # specify instances according to config file
+
+        # instantiate infection instances will set up self.infection_obj which contains infection class instance which can be intantiated for each agent
+        self.initialise_infection()
 
         # returns self.event_config_obj dictionary which is a dictionary of each event instance
         self.inititialise_events(config_file)
@@ -139,8 +173,31 @@ class Simulation():
         # add event instances to current_events attributes for each agent
         print("self.agents",self.agents)
 
+        # Iterate over list of infection and infect agents
+        if self.event_json["infection_criteria"]:
+            for infection_dict in self.event_json["infection_criteria"]:
+                infect_func_string = infection_dict["infect"]["function"]
+                # Retrieve infection function from config file
+                infection_func = getattr(Infection(), infect_func_string)
+                # Call function with keyword arguments from config. Here we are calling the infect() function
+                kwargs = infection_dict["infect"]["kwargs"]
+                current_points  = list(zip(self.pop_config.sub_population[:,5], self.pop_config.sub_population[:,6]))
+                print("current_points", current_points)
+                infectious_indices = np.where(self.pop_config.sub_population[:,8] == 1)
+                print("infectious_indices", infectious_indices)
+                print(kwargs)
+                newly_infected_indices = infection_func(current_points =  current_points, infectious_indices = infectious_indices, **kwargs)
+
+                # Convert affected agents to infected
+                self.pop_config.sub_population[newly_infected_indices,7] = 1
+                # update point_plots_matrix which is used to visualise the agents. This update allows point to be labelled on the basis of their infection status
+                self.pop_config.point_plots_matrix[:,1] = self.pop_config.sub_population[:,8]
 
         for agent in self.agents:
+            # attach infection instance to infected agents. The infection instance determines the infection progression for each agent
+            if self.event_json["infection_criteria"]:
+                agent.attach_infection_obj(self.infection_obj)
+                agent.infection_update(self.event_json)
             # Load events into Tracker class
             if agent.tracker_instance is None:
                 print("1")
@@ -196,16 +253,15 @@ def main():
 
     # Initialise agent simulation
     simulation = Simulation()
-    simulation.read_in_event_config(json_file = "./config/example_config.json") # read in event config json file
+    simulation.read_in_event_config(json_file = "./config/example_config_with_infection.json") # read in event config json file
 
     simulation.initialise_simulation()
     # Initialise clock
     # Initialise the Clock
     clock = Clock()
     while clock.tstep_count < 10000:
-        print("hello")
+
         simulation.tstep()
-        print("goodbye")
 
         # Advance the clock on one tstep (currently hardcoded to advance 1min)
         clock.update_tstep()

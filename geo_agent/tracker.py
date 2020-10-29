@@ -226,15 +226,13 @@ class Tracker():
         self.waypoint_list.append((self.home_location_y, self.home_location_x))
 
         # Generate route point list from previous event to home location
-        # print("start end",start_event.osm_ways_id, self.agent.osm_ways_id)
         self.route.append(self._calculate_route(start_event.osm_ways_id, self.agent.osm_ways_id))
-        print("length of self.route",len(self.route))
-        print("route_matrix_row",route_matrix_row)
+
         self.route_matrix[route_matrix_row,1] = -1 # to be defined on the fly as the numpy array is iterated over during tstep
         self.route_matrix[route_matrix_row,2] = len(self.route) -1
         self.route_matrix[route_matrix_row,3] = 100
         self.route_matrix[route_matrix_row,5] = -1 # # to be defined on the fly as the numpy array is iterated over during tstep
-        print(self.route_matrix)
+
 
     def count_route_number(self, time_threshold = 120):
         """
@@ -342,13 +340,14 @@ class Tracker():
         if self.route_matrix is not None:
             # merge all linestrings together into one
             current_view_row_idx = np.where(self.route_matrix[:,0] == 1)
-            print("current_view_row_idx", current_view_row_idx)
+            #  Check length of the index array relates to a single row
+            try:
+                current_view_row_idx[0].shape[0] == 1
+            except IndexError as e:
+                print("current_view_row_idx should relate to a single index relating to the current relevant row self.route_matrix.")
+                raise e
+
             next_idx = current_view_row_idx[0] + 1
-            print(next_idx[0])
-            if next_idx == 1:
-                print("no need to format")
-            if next_idx[0] == 1:
-                print("you need to format")
 
             current_view = self.route_matrix[self.route_matrix[:,0] == 1]
             # Move agent a single tstep if the journey status is 'in progress'
@@ -374,56 +373,36 @@ class Tracker():
                 # Change journey status to 'complete' once end point of journey linestring has been reached
                 if (utm.x == self.route[int(current_view[0,2])].coords[-1][0]) & (utm.y == self.route[int(current_view[0,2])].coords[-1][1]):
                     self.route_matrix[current_view_row_idx,4] = 0 # journey complete
+                    # If Agent is infected with COVID check if they have arrived home and if so remove subsequent events (agent.current_state = 0 'healthy', 1 'infected', 2 'recovered', 3 'dead')
+                    # Convert array output to integer index for list
+                    current_idx = current_view_row_idx[0].shape[0]
+                    if (self.agent.current_state == 1) & ((self.home_location_y, self.home_location_x) == self.waypoint_list[current_idx]):
+                        print("Need to check if infected are in home location")
+                        self.route_matrix = None
+                        self.waypoint_list = []
+                        self.route = []
 
             else:
-                # update time at event location subtract 1 tstep unit
-                self.route_matrix[current_view_row_idx,5] = current_view[0,5] - 1 # needs updating for tstep units
-                print("self.route_matrix[current_view_row_idx,5]", self.route_matrix[current_view_row_idx,5])
-                # Once time at location has reached zero move on to next leg of journey
-                if self.route_matrix[current_view_row_idx,5] == 0:
-                    # Make current row of route_matrix inactive and activate the next row
-                    self.route_matrix[current_view_row_idx,0] = 0
-                    next_idx = current_view_row_idx[0] + 1
-                    # update next row of self.route_matrix if it exists
-                    if next_idx <= self.route_matrix.shape[0]:
-                        print("check did we enter this if loop")
+
+                # If this is the last row of the event object then the time spent at event is set to -1 so erase route objects
+                if self.route_matrix[current_view_row_idx,5] == -1:
+                    self.route_matrix = None
+                    self.waypoint_list = []
+                    self.route = []
+                else:
+                    # update time at event location subtract 1 tstep unit
+                    self.route_matrix[current_view_row_idx,5] = current_view[0,5] - 1 # needs updating for tstep units
+                    print("self.route_matrix[current_view_row_idx,5]", self.route_matrix[current_view_row_idx,5])
+
+                    # Once time at location has reached zero move on to next leg of journey
+                    if self.route_matrix[current_view_row_idx,5] == 0:
+                        # Make current row of route_matrix inactive and activate the next row
+                        self.route_matrix[current_view_row_idx,0] = 0
+                        next_idx = current_view_row_idx[0] + 1
+                        # update next row of self.route_matrix (no need to check if this is the last row as this is checked by "if self.route_matrix[current_view_row_idx,5] == -1" statement)
                         self.route_matrix[next_idx,0] = 1
                         self.route_matrix[next_idx,4] = 1
 
-
-
-
-
-
-
-
-
-
-        # for c in self.route_matrix:
-        #     print("hello",c.length)
-
-        # merged_routes = ops.linemerge([*self.route])
-
-        # for coord in shape(merged_routes).coords:
-        #     print(coord)
-        # print(merged_routes)
-
-
-    # def latlon_2_yx(self, lat=None, lon=None):
-
-    #     """
-    #     Converts WGS84 lat lon values to UTM
-    #     """
-    #     # Project lon lat coordinates into UTM scale
-    #     return self.projectlon_lat_2_utm(lat, lon)
-
-
-    # def yx_2_latlon(self, y,x):
-    #     """
-    #     Converts y,x UTM values to WGS84 lat, lon
-    #     """
-    #     # Project UTM y, x values to lon lat
-    #     return self.projectlon_lat_2_utm(lat, lon, inverse=True)
 
     def _random_route(self, start_vertex, time = 10, speed = 50):
         """

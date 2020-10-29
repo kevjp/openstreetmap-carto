@@ -22,7 +22,7 @@ def initialize_population(speed, pop_size, mean_age=45, max_age=105,
     3 : current heading in x direction
     4 : current heading in y direction
     5 : current speed
-    6 : current state (0=healthy, 1=sick, 2=immune, 3=dead, 4=immune but infectious)
+    6 : current state (0=healthy, 1 = infected, 3 = recovered, 4 = dead)
     7 : age
     8 : infected_since (frame the person got infected)
     9 : recovery vector (used in determining when someone recovers or dies)

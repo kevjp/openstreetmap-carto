@@ -15,6 +15,7 @@ from random import randint
 
 from generate_probabilities import Generate_location_probs
 from database import Database
+import pyproj
 
 
 
@@ -52,7 +53,7 @@ class Load_populations(Configuration):
         self.pop_size = self.household_df.shape[0]
 
         #initialize population matrix
-        self.sub_population = np.zeros((self.pop_size, 12))
+        self.sub_population = np.zeros((self.pop_size, 10))
         # initalize point_plots_matrix
         self.point_plots_matrix = np.zeros((self.pop_size, 2), dtype=object)
 
@@ -72,8 +73,10 @@ class Load_populations(Configuration):
 
         self.sub_population[:,4] = self.nearest_lon_list
 
-        self.point_plots_matrix[:,0] = self.nearest_point_convert
-        self.point_plots_matrix[:,1] = ["sample"] * self.pop_size
+        # convert lat lon to utm projection (tuple (utm.x,utm.y))
+
+        projectlon_lat_2_utm = pyproj.Proj(proj='utm', zone=30, ellps='WGS84', preserve_units=True)
+        self.sub_population[:,[5,6]] = np.array([projectlon_lat_2_utm(lat, lon) for lat, lon in zip(self.nearest_lat_list, self.nearest_lon_list)])
 
 
         self.max_age = 105
@@ -81,16 +84,32 @@ class Load_populations(Configuration):
 
         #initalize ages
         std_age = (self.max_age - self.mean_age) / 3
-        self.sub_population[:,5] = np.int32(np.random.normal(loc = self.mean_age,
+        self.sub_population[:,7] = np.int32(np.random.normal(loc = self.mean_age,
                                                 scale = std_age,
                                                 size=(self.pop_size,)))
 
-        self.sub_population[:,5] = np.clip(self.sub_population[:,5], a_min = 0,
+        self.sub_population[:,7] = np.clip(self.sub_population[:,7], a_min = 0,
                               a_max = self.max_age) #clip those younger than 0 years
 
+        # initialize which agents are infected randomly with specified percentage of starting population infected (healthy =0 , infected = 1, recovered = 2, death = 3)
+        self.sub_population[:,8] = self.random_assign_zero_ones(array_size = self.pop_size)
+
         #build recovery_vector
-        self.sub_population[:,8] = np.random.normal(loc = 0.5, scale = 0.5 / 3, size=(self.pop_size,))
-        # print(self.sub_population)
+        self.sub_population[:,9] = np.random.normal(loc = 0.5, scale = 0.5 / 3, size=(self.pop_size,))
+
+        # Generate numpy matrix for plotting points using leaflet realtime. These points are outputted to /openstreetmap-carto/output.json
+        self.point_plots_matrix[:,0] = self.nearest_point_convert
+        self.point_plots_matrix[:,1] = self.sub_population[:,8]
+        # self.point_plots_matrix[:,1] = ["sample"] * self.pop_size
+
+
+    def random_assign_zero_ones(self, list_of_values = [0, 1, 2, 3], array_size= 1000, prob_list = [.9, .1, 0, 0]):
+        """
+        generates numpy array of zeros and ones at a defined ratio specified by prob_list argument [proportion of zeros (healthy), proportion of ones (infected), proportion of twos (recovered), proportion of threes (dead)]
+
+        """
+        nums = np.random.choice(list_of_values, size=array_size, p=prob_list)
+        return nums
 
 
 
