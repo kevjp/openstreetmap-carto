@@ -257,7 +257,6 @@ class Tracker():
         self.route_count += 1
 
         # Initialise route list
-        print("self.route_count",self.route_count)
         self.route_matrix = np.zeros((self.route_count,6))
 
 
@@ -354,19 +353,12 @@ class Tracker():
             if current_view[0,4] == 1:
                 # update distance travelled by agent
                 utm = self.route[int(current_view[0,2])].interpolate(current_view[0,3])
-                print(int(current_view[0,2]))
-                check = self.route[int(current_view[0,2])].coords[0]
-                print("check start of first leg of journey in self.route", self.projectlon_lat_2_utm(check[0], check[1], inverse=True))
-                check_last = self.route[int(current_view[0,2])].coords[-1]
-                print("check end of last leg of journey in self.route",self.projectlon_lat_2_utm(check_last[0], check_last[1], inverse=True))
 
                 self.route_matrix[current_view_row_idx,3] = self.route_matrix[current_view_row_idx,3] + 100 # need to change so it is in line with speed
 
 
                 # convert location back to lon lat coord system and update agent instance and subpopulation array used for plotting
-                print("self.agent.current_lon, self.agent.current_lat", self.agent.current_lon, self.agent.current_lat)
                 self.agent.current_lon, self.agent.current_lat = self.projectlon_lat_2_utm(utm.x, utm.y, inverse=True)
-                print("self.agent.current_lon, self.agent.current_lat", self.agent.current_lon, self.agent.current_lat)
                 # update sub_population array for plotting purposes
                 self.config.point_plots_matrix[int(self.agent.id),0] = Point(self.agent.current_lon, self.agent.current_lat)
 
@@ -392,7 +384,6 @@ class Tracker():
                 else:
                     # update time at event location subtract 1 tstep unit
                     self.route_matrix[current_view_row_idx,5] = current_view[0,5] - 1 # needs updating for tstep units
-                    print("self.route_matrix[current_view_row_idx,5]", self.route_matrix[current_view_row_idx,5])
 
                     # Once time at location has reached zero move on to next leg of journey
                     if self.route_matrix[current_view_row_idx,5] == 0:

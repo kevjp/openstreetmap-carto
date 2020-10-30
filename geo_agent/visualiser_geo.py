@@ -36,18 +36,15 @@ def build_fig_geo(Config, shapefile = './postcode_shape_files/osm_north_london.s
 
     # read in shapefile for map
     map_df = gpd.read_file(shapefile)
-    print(map_df.columns)
 
-    print(map_df.iloc[1])
 
     #set projection for shapefile in  first subplot
     ax1 = fig.add_subplot(spec[0,0], projection=gcrs.AlbersEqualArea())
-    print(map_df.iloc[1])
 
     extent = [-0.18, 51.62,  -0.10, 51.7]
     # plot map
     gplt.polyplot(map_df['geometry'], projection=gcrs.AlbersEqualArea(), ax=ax1, extent=extent)
-    print(map_df.iloc[1])
+
     plt.title('Map showing location of infected individuals')
     # plt.show(ax1)
 
@@ -56,7 +53,6 @@ def build_fig_geo(Config, shapefile = './postcode_shape_files/osm_north_london.s
     ax2.set_title('number of infected')
     #ax2.set_xlim(0, simulation_steps)
     ax2.set_ylim(0, Config.pop_size + 100)
-    print("in build_fig")
     return fig, spec, ax1, ax2, map_df
 
 
@@ -119,17 +115,13 @@ def draw_tstep(Config,
 
 
 
-    print("pop_df", pop_df)
     pop_gdf = gpd.GeoDataFrame(pop_df, geometry=pop_df.geometry)
 
     # pop_gdf = gpd.GeoDataFrame(all_agents, columns = ['geometry', 'label'])
 
-    print("pop_gdf", pop_gdf)
-
     extent = [-0.18, 51.62,  -0.10, 51.7]
     extent = [-0.2671, 51.6167,  -0.1198, 51.6940]
     gplt.pointplot(pop_gdf, ax=ax1, extent=extent, hue='label', s= 2)
-    print("in draw")
 
 
     # plt.show()
@@ -194,9 +186,7 @@ def assign_agent_loc_2_mml_file(file='/openstreetmap-carto/project.mml', updated
     with open(file, 'r') as stream:
         file_string = yml.load(stream)
     # update project.mml file with current agent locations
-    print("filesrting before ...............\n", file_string['Layer'][-1]['Datasource']['inline'])
     file_string['Layer'][-1]['Datasource']['inline'] = updated_locations
-    print("filesrting before ...............\n", file_string['Layer'][-1]['Datasource']['inline'])
     # write to yaml file
     with open('/openstreetmap-carto/project.mml', 'w') as file:
         yml.indent(mapping=2, sequence=4, offset=2)
@@ -206,11 +196,9 @@ def assign_agent_loc_2_mml_file(file='/openstreetmap-carto/project.mml', updated
 def parse_yaml_result():
 
     conf = parse_config(path="/openstreetmap-carto/project.mml")
-    print("parse_yaml_result", conf)
     with open('/openstreetmap-carto/project.mml', 'w') as file:
         yaml.dump(conf, file)
 
-    # return parse_yaml()
 
 
 

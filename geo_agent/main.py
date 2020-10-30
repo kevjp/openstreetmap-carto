@@ -161,7 +161,7 @@ class Simulation():
         self.inititialise_events(config_file)
         # initialise the plot obect to visualise agent movement on map
         self.fig, self.spec, self.ax1, self.ax2, self.shapefile_df = build_fig_geo(self.pop_config)
-        print("should only happen once")
+
 
 
     def tstep(self):
@@ -171,7 +171,6 @@ class Simulation():
 
         #### NEED TO PUT INTO SEPARATE FUNCTION SO THAT inititialise_events is only called once
         # add event instances to current_events attributes for each agent
-        print("self.agents",self.agents)
 
         # Iterate over list of infection and infect agents
         if self.event_json["infection_criteria"]:
@@ -182,7 +181,7 @@ class Simulation():
                 # Call function with keyword arguments from config. Here we are calling the infect() function
                 kwargs = infection_dict["infect"]["kwargs"]
                 current_points  = list(zip(self.pop_config.sub_population[:,5], self.pop_config.sub_population[:,6]))
-                print("current_points", current_points)
+
                 infectious_indices = np.where(self.pop_config.sub_population[:,8] == 1)
                 print("infectious_indices", infectious_indices)
                 print(kwargs)
