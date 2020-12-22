@@ -238,7 +238,7 @@ class Simulation():
             if self.event_json["infection_criteria"] and agent.current_state == 1:
                 agent.attach_infection_obj(self.infection_obj)
                 # attach disease progression object to agent
-                agent.infection_update(self.event_json)
+                self.pop_config.sub_population[agent.id,10] = agent.infection_update(self.event_json)
                 agent.disease_progression_state
 
             # Load events into Tracker class

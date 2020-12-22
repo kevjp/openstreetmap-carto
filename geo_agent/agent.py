@@ -39,7 +39,7 @@ class Agent():
         self.current_lon = row[4] # lon column
         # initialise all agents disease_progression_state to None and at each tstep update state depending on current disease progression as defined by Infection().disease_timer function
         # available values are None, -2 to indicate that the disease progression object needs to be defined, -1 to indicate that the disease progression object has been defined and  string values "asymptomatic", "mild", "hospitalised", "ventilated", "dead"
-        # In Load_populations.sub_population[:,9] referes to disease state 0 = None, 1=aymptimatic, 2= mild, 3= hospitalised, 4= ventilated, 5= recovered, 6= dead
+        # In Load_populations.sub_population[:,10] referes to disease state 0 = None, 1=aymptimatic, 2= mild, 3= hospitalised, 4= ventilated, 5= recovered, 6= dead
         self.disease_progression_state = None
         self.tracker_instance = None
         self.event_history_dict = {}
@@ -159,8 +159,10 @@ class Agent():
                 self.disease_progression_state = infection["timer_objects"][0]["state"]
                 # First time disease_progression_obj is processed by track_disease_progression
                 self.track_disease_progression(self.current_infections[infection["description"]].disease_progression_obj)
+                return self.disease_progression_state
             else:
                 self.track_disease_progression(self.current_infections[infection["description"]].disease_progression_obj)
+                return self.disease_progression_state
 
 
     def track_disease_progression(self, disease_progression_obj):
@@ -178,10 +180,12 @@ class Agent():
             # change label according to label_change.
             # Event functions will be initiated as part of the normal event attachment process
             self.disease_progression_state = disease_progression_obj[self.disease_progression_state]["label_change"]
+            return self.disease_progression_state
 
         else:
             # reduce time at current infection state by 1 tstep
             disease_progression_obj[self.disease_progression_state]["days"] = disease_progression_obj[self.disease_progression_state]["days"] - np.timedelta64(1,'m')
+            return self.disease_progression_state
 
 
 
