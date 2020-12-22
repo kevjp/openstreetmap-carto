@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   kosmtik:
-    image: kosmtik:v1
+    image: kosmtik:v2
     build:
       context: .
       dockerfile: Dockerfile
