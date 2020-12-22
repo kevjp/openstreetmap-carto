@@ -31,8 +31,18 @@ class Event(Eventinit,Eventsampling):
         self.event_OSM_search_term = ''
         self.lat = ''
         self.lon = ''
-        self.osm_ways_id = ''
+        self.utmx = ''
+        self.utmy = ''
+        self.osm_way_id = ''
+        self.source_node_osm_way_id = ''
+        self.target_node_osm_way_id = ''
         self.random_movement = False
+        self.current_infections = {}
+        self.attached_agent = None
+        self.clock_instance = None
+        self.return_home = 1 # default all events return home
+        self.event_initialised = 0 # 0 indicates that the event has been initialised with values defined by the functions defined in the probability_sampling_functions dictionary within the config file
+
 
 
 
@@ -73,6 +83,8 @@ class Event(Eventinit,Eventsampling):
         sample_val = choice(distribution)
 
         return sample_val
+
+
 
 
 

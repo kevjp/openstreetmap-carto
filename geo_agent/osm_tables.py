@@ -12,14 +12,17 @@ import numpy as np
 
 def ways_tab(convert_osm_nodes_sql_2_numpy, convert_osm_ways_vertices_sql_2_numpy):
     # Connect to database
-    #conn = psycopg2.connect(dbname = "london_routing", user = "kevinryan", host = "localhost")
+    # local machine
+    # conn = psycopg2.connect(dbname = "latest_routing", user = "kevinryan", host = "localhost")
+    # docker version
     conn = psycopg2.connect(dbname = 'routing', user = 'docker', password = 'docker', host = 'pg_routing')
     # conn = psycopg2.connect(dbname = "gis", user = "postgres", host = "db")
     curs = conn.cursor()
     t1 = time.time()
     start = 2448172873
     end = 2372627054
-    curs.execute("select osm_id, attributes -> 'lon' as lon, attributes -> 'lat' as lat, svals(slice(tags, ARRAY['leisure','shop'])) from osm_nodes where tags -> 'shop' = 'supermarket' or tags -> 'leisure' = 'park';")
+    # curs.execute("select osm_id, attributes -> 'lon' as lon, attributes -> 'lat' as lat, svals(slice(tags, ARRAY['leisure','shop'])) from osm_nodes where tags -> 'shop' = 'supermarket' or tags -> 'leisure' = 'park';")
+    curs.execute("select osm_id, attributes -> 'lon' as lon, attributes -> 'lat' as lat, svals(slice(tags, ARRAY['leisure','shop','amenity'])) from osm_nodes where tags -> 'shop' = 'supermarket' or tags -> 'leisure' = 'park' or tags -> 'amenity' = 'hospital';")
     # curs.execute("select osm_id, attributes -> 'lon' as lon, attributes -> 'lat' as lat, svals(slice(tags, ARRAY['leisure','shop'])) from planet_osm_point where tags -> 'shop' = 'supermarket' or tags -> 'leisure' = 'park';")
     results = curs.fetchall()
     osm_nodes_np_arr = convert_osm_nodes_sql_2_numpy(results)

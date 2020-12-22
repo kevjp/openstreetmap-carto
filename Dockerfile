@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # npm prefix to /usr/local, which breaks the install
 # RUN npm set prefix /usr && npm install -g kosmtik
 # Replace original kosmtik install with my version which uses leaflet realtime
-RUN npm set prefix /usr && npm install -g https://github.com/kevjp/kosmtik/archive/0.0.17.tar.gz
+RUN npm set prefix /usr && npm install -g https://github.com/kevjp/kosmtik/archive/v0.0.17.1.tar.gz
 
 WORKDIR /usr/lib/node_modules/kosmtik/
 RUN kosmtik plugins --install kosmtik-overpass-layer \

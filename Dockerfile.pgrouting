@@ -68,14 +68,15 @@ ADD ./scripts/tune-postgis.sh /docker-entrypoint-initdb.d
 RUN ls
 
 
-COPY mapconfig_shops_parks.xml .
+#COPY mapconfig_shops_parks.xml .
+COPY mapconfig.xml .
 COPY greater-london-latest.osm .
 
 #RUN /etc/init.d/postgresql start &&\
  #osm2pgrouting --file greater-london-latest.osm --conf mapconfig_shops_parks.xml --dbname routing --username docker --password docker
 
  RUN /etc/init.d/postgresql start &&\
- osm2pgrouting --file greater-london-latest.osm --conf mapconfig_shops_parks.xml --dbname routing --username docker --password docker --clean --attributes --addnodes --tag
+ osm2pgrouting --file greater-london-latest.osm --conf mapconfig.xml --dbname routing --username docker --password docker --clean --attributes --addnodes --tag
 
 RUN ls /etc/postgresql/
 

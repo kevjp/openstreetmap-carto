@@ -32,10 +32,14 @@ class Database():
     ways contains edges in maps defined by source and target values
     """
 
-
+    # docker login
     def __init__(self, name = 'routing', user = 'docker', password = 'docker', host = 'pg_routing'):
-
+    # local machine login
+    #def __init__(self, name = 'latest_routing', user = 'kevinryan', host = 'localhost'):
+        # docker login
         self._conn = psycopg2.connect(f"dbname = {name} user = {user} password = {password} host = {host}")
+        # local machine login
+        # self._conn = psycopg2.connect(f"dbname = {name} user = {user} host = {host}")
         self._curs = self._conn.cursor()
 
 

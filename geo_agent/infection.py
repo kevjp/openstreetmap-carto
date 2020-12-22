@@ -14,12 +14,12 @@ class Infection(Infectioninit):
     """
     def __init__(self, *args, **kwargs):
 
+
         self.infection_radius = kwargs.get("infection_radius")
         self.isolation_adherence = kwargs.get("isolation_adherence")
         self.infection_status = "healthy"
-        self.disease_progression_obj = {} # populate with specifics of how disease progresses for each agent
+        # self.disease_progression_obj = {} # populate with specifics of how disease progresses for each agent
         self.infection_days = self.gauss_distribution_generator(start = 0, stop = 14, mean = 5, sd = 2, size = 1000, conversion_factor = 1440, tstep_units = 'm')
-
 
 
 
@@ -34,23 +34,35 @@ class Infection(Infectioninit):
         """
         # Calculate distance weights for each healthy agent based on their proximity to infected agents. Only consider agents within 2m of each other
         # agents which are touching the weight value is 1 and the weight value is the recipricol of the distance in meters from the infected agent
+        print("current_points = ", current_points)
+        print("infection_distance =", infection_distance)
         distance_weights = weights.distance.DistanceBand(current_points, threshold= infection_distance,binary=False)
+        print("distance_weights = ", distance_weights)
+        print("distance_weights.neighbors", distance_weights.neighbors)
 
         newly_infected_indices = []
         # Filter out weights not relating to agents which are not infectious and scale distance_weights by time-dependent infection probability p
         for index, (key,weight) in enumerate(distance_weights.neighbors.items()):
             relevant_bool_ind = np.in1d(weight,infectious_indices)
+            print("relevant_bool_ind", relevant_bool_ind)
             relevant_weights = np.array(distance_weights.weights[key])[relevant_bool_ind]
+            print("relevant_weights", relevant_weights)
             # scale weights by time-dependent infection probability p
             scaled_relevant_weights = relevant_weights * p
+            print("p value =", p)
+            print("scaled_relevant_weights", scaled_relevant_weights)
             # calculating probability of getting infected
             prob_of_not_infecting = np.prod(1 - scaled_relevant_weights)
             prob_of_infecting = 1 - prob_of_not_infecting
+            print("prob_of_not_infecting",prob_of_not_infecting)
             # sample probability
             sample_prob = random.random()
+            print("sample_prob =", sample_prob, "prob_of_infecting=", prob_of_infecting)
             if sample_prob <= prob_of_infecting:
+                print("INFECTION HAS HAPPENED!!!!!!!!!!!!!!")
                 # add index of newly infected agent
                 newly_infected_indices.append(index)
+        print("newly_infected_indices", newly_infected_indices)
         return newly_infected_indices
 
 
@@ -79,6 +91,7 @@ class Infection(Infectioninit):
 
     def disease_progression_func(self, *args, **kwargs):
         """
+
         Based on the defined disease attributes define a disease progression object for the infected agent
         disease_progress_obj : dict of dict
         {asymptomatic : {days : , action : None or call to function eg None, label_change : eg. mild},
@@ -89,16 +102,17 @@ class Infection(Infectioninit):
         """
         # Retrieve infection states from config file
         timer_objects = args
-
+        self.disease_progression_obj = {}
         for state_obj in timer_objects:
             # Initial disease state
             self.disease_progression_obj[state_obj["state"]] : {}
             # calculate number of days at this disease state (distributions for days in each state are intialised by initialise_infection in main.py)
-            # Each distribution is accessible from infection class instance via self.<state>.days_in_state where for COVID <state> is defined by value in timer_objects list realting to state keyword
-            infection_class_att = state_obj["state"] + "_days_in_state"
-            days_distribution = getattr(self, infection_class_att)
+            # Each distribution is accessible from infection class instance via self.<state>_days_in_state where for COVID <state> is defined by value in timer_objects list realting to state keyword
+            if "days_in_state" in state_obj.keys():
+                infection_class_att = state_obj["state"] + "_days_in_state"
+                days_distribution = getattr(self, infection_class_att)
 
-            self.disease_progression_obj[state_obj["state"]] = {"days" : choice(days_distribution)}
+                self.disease_progression_obj[state_obj["state"]] = {"days" : choice(days_distribution)}
 
 
             # Determine if disease pregresses to worst state

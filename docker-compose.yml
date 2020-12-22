@@ -45,7 +45,7 @@ services:
     image: postgresql_krls:latest
     build:
       context: .
-      dockerfile: Dockerfile.pgrouting_v2
+      dockerfile: Dockerfile.pgrouting
     volumes:
       - .:/openstreetmap-carto
     ports:
@@ -64,6 +64,18 @@ services:
       dockerfile: ./geo_agent/Dockerfile.geo_agent
     volumes:
       - .:/openstreetmap-carto
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/agent.py:/geo_agent/agent.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/config/example_config_with_infection.json:/geo_agent/config/example_config_with_infection.json
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/event.py:/geo_agent/event.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/tracker.py:/geo_agent/tracker.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/event_functions/event_init.py:/geo_agent/event_functions/event_init.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/main.py:/geo_agent/main.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/population_geo.py:/geo_agent/population_geo.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/data/barnet_points_100.csv:/geo_agent/data/barnet_points_100.csv
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/infection_functions/infect_init.py:/geo_agent/infection_functions/infect_init.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/infection.py:/geo_agent/infection.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/subpopulations.py:/geo_agent/subpopulations.py
+      - /Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/geo_agent/utils.py:/geo_agent/utils.py
     depends_on:
       - pg_routing
     environment:

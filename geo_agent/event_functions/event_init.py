@@ -56,7 +56,8 @@ class Eventinit():
             self._probabilities[:,idx] = self._probabilities[:,idx] / np.max(self._probabilities[:,idx])
         return self._probabilities
 
-    def init_event_starttime(self, start = 0, stop = 840, skewness = 0, mean = 420, size = 1000):
+    #def init_event_starttime(self, start = 0, stop = 840, skewness = 0, mean = 420, size = 1000):
+    def init_event_starttime(self, start = 0, stop = 500, skewness = 0, mean = 250, size = 1000):
 
         """
         Generate a distribution of start times for going to an event
@@ -72,7 +73,8 @@ class Eventinit():
         for i, m in enumerate(starttime):
             m = int(round(m)) # numpy timedelta only accepts whole int values
             # generate a datetime.time object for each element in the time distribution
-            self._starttime[i] = np.datetime64('1-01-01 08:00') + np.timedelta64(m, 'm')
+            #self._starttime[i] = np.datetime64('1-01-01 08:00') + np.timedelta64(m, 'm')
+            self._starttime[i] = np.datetime64('1-01-01 00:00') + np.timedelta64(m, 'm')
             # self._starttime[i] = (datetime.combine(date(1,1,1),time(8, 0)) + timedelta(0, 0,0,0,m)).time()
 
         return self._starttime
@@ -84,30 +86,29 @@ class Eventinit():
         generate distribution of time periods spent at event location
         """
         min_list = []
-        minutes = stats.truncnorm.rvs(start - mean/sd, stop - mean/sd,loc=mean, size=size, scale=sd)
+        minutes = stats.truncnorm.rvs((start - mean)/sd, (stop - mean)/sd,loc=mean, size=size, scale=sd)
         # Convert values over to timedelta values
         for i, m in enumerate(minutes):
             m = int(round(m)) # numpy timedelta only accepts whole int values
-
             min_list.append(np.timedelta64(m, 'm'))
         self._minutes = np.array(min_list)
 
         return self._minutes
 
 
-    def init_time_before_event_occurs_again(self, start = 0, stop = 10, mean = 7, sd = 2, size = 1000):
+    #def init_time_before_event_occurs_again(self, start = 0, stop = 10, mean = 7, sd = 2, size = 1000):
+    def init_time_before_event_occurs_again(self, start = 0, stop = 0.05, mean = 0.035, sd = 0.0175, size = 1000):
 
         """
         generate a distribution of time periods (in minutes) before the event will happen again
         """
 
         day_list = []
-        days = stats.truncnorm.rvs(start - mean/sd, stop - mean/sd,loc=mean, size=size, scale=sd)
+        days = stats.truncnorm.rvs((start - mean)/sd, (stop - mean)/sd,loc=mean, size=size, scale=sd)
         # Convert values over to timedelta values
         for i, d in enumerate(days):
-            d = int(round(d)) # numpy timedelta only accepts whole int values
             mins = d * 1440
-
+            mins = int(round(mins))# numpy timedelta only accepts whole int values
             day_list.append(np.timedelta64(mins, 'm'))
         self._days = np.array(day_list)
 

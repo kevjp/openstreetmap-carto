@@ -13,7 +13,7 @@ from utils import check_folder
 
 def initialize_population(speed, pop_size, mean_age=45, max_age=105,
                           xbounds=[0, 1], ybounds=[0, 1],
-                          household_data = './data/barnet_points_19.csv'):
+                          household_data = './data/barnet_points_100.csv'):
     '''initialized the population for the simulation
     the population matrix for this simulation has the following columns:
     0 : unique ID

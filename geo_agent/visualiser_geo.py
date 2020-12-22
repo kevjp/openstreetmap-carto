@@ -103,17 +103,14 @@ def draw_tstep(Config,
     # pop_labels = np.concatenate((healthy_label, infected_label, immune_label, fatalities_label))
 
     # pop_matrix = np.vstack((pop_coordinates.T, pop_labels))
-    # print(pop_matrix.T.shape)
     # pop_df = pd.DataFrame(pop_matrix.T, columns = ['Longitude', 'Latitude', 'Label'])
-    pop_df = pd.DataFrame(all_agents, columns = ['geometry', 'label'])
+    pop_df = pd.DataFrame(all_agents, columns = ['geometry', 'label', 'disease_progression'])
     # Manually added landmarks for now
-    pop_df.loc[2] = [Point(-0.1256032, 51.63368), 'supermarket']
-    pop_df.loc[3] = [Point(-0.1713237, 51.6495658), 'supermarket']
-    pop_df.loc[4] = [Point(-0.1137062, 51.6347074), 'park']
-    pop_df.loc[5] = [Point(-0.1693677, 51.6615703), 'home']
-    pop_df.loc[6] = [Point(-0.1705196, 51.6665827), 'home']
-
-
+    # pop_df = pop_df.append({'geometry' : Point(-0.1256032, 51.63368), 'label' : 'supermarket'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1713237, 51.6495658), 'label' : 'supermarket'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1137062, 51.6347074), 'label' : 'park'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1693677, 51.6615703), 'label' : 'home'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1705196, 51.6665827), 'label' : 'home'}, ignore_index=True)
 
     pop_gdf = gpd.GeoDataFrame(pop_df, geometry=pop_df.geometry)
 
@@ -138,22 +135,26 @@ def parse_agent_location(Config):
     #plot population segments
     all_agents = Config.point_plots_matrix
 
-    pop_df = pd.DataFrame(all_agents, columns = ['geometry', 'label'])
+    pop_df = pd.DataFrame(all_agents, columns = ['geometry', 'label', 'disease_progression'])
+    # pop_df = pd.DataFrame(all_agents, columns = ['geometry', 'label'])
 
-    pop_df.loc[2] = [Point(-0.1256032, 51.63368), 'supermarket']
-    pop_df.loc[3] = [Point(-0.1713237, 51.6495658), 'supermarket']
-    pop_df.loc[4] = [Point(-0.1137062, 51.6347074), 'park']
-    pop_df.loc[5] = [Point(-0.1693677, 51.6615703), 'home']
-    pop_df.loc[6] = [Point(-0.1705196, 51.6665827), 'home']
+    # pop_df = pop_df.append({'geometry' : Point(-0.1256032, 51.63368), 'label' : 'supermarket'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1713237, 51.6495658), 'label' : 'supermarket'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1137062, 51.6347074), 'label' : 'park'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1693677, 51.6615703), 'label' : 'home'}, ignore_index=True)
+    # pop_df = pop_df.append({'geometry' : Point(-0.1705196, 51.6665827), 'label' : 'home'}, ignore_index=True)
+
 
     pop_gdf = gpd.GeoDataFrame(pop_df, geometry=pop_df.geometry)
     pop_gdf.index.name = 'id'
+    # local machine file path
+    # pop_gdf.to_file("/Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/output.json", index=True, driver="GeoJSON")
+    # docker file path
     pop_gdf.to_file("/openstreetmap-carto/output.json", index=True, driver="GeoJSON")
 
     # convert_df_2_string(pop_gdf)
 
     # parse_yaml_result()
-    # print(pop_gdf)
 
     # str_out = convert_df_2_string(pop_gdf)
     # assign_agent_loc_2_mml_file(updated_locations = str_out)
@@ -170,14 +171,14 @@ def convert_df_2_string(df):
         if i == len(df) - 1:
             output += str(row['label']) + ',' + str(row['geometry'])
         else:
-            # print("row:", row['geometry'], row['label'])
             output += str(row['label']) + ',' + str(row['geometry']) + '\n'
     # set environment variable ${AGENTS}
     # os.environ['AGENTS'] = output
     return output
 
-
-
+# local machine version
+# def assign_agent_loc_2_mml_file(file='/Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/project.mml', updated_locations = None):
+# docker version
 def assign_agent_loc_2_mml_file(file='/openstreetmap-carto/project.mml', updated_locations = None):
 
     yml = yaml.YAML()
@@ -188,13 +189,20 @@ def assign_agent_loc_2_mml_file(file='/openstreetmap-carto/project.mml', updated
     # update project.mml file with current agent locations
     file_string['Layer'][-1]['Datasource']['inline'] = updated_locations
     # write to yaml file
+    # local machine version
+    # with open('/Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/project.mml', 'w') as file:
+    # docker version
     with open('/openstreetmap-carto/project.mml', 'w') as file:
+
         yml.indent(mapping=2, sequence=4, offset=2)
         documents = yml.dump(file_string, file)
 
 
 def parse_yaml_result():
-
+    # local machine version
+    # conf = parse_config(path="/Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/project.mml")
+    # with open('/Users/kevinryan/Documents/City_DSI/population_movement_simulations/openstreetmap-carto/project.mml', 'w') as file:
+    # docker version
     conf = parse_config(path="/openstreetmap-carto/project.mml")
     with open('/openstreetmap-carto/project.mml', 'w') as file:
         yaml.dump(conf, file)
