@@ -143,7 +143,7 @@ class Simulation():
 
 
 
-    def initialise_simulation(self, household_data = './data/barnet_points_100.csv', \
+    def initialise_simulation(self, household_data = './data/barnet_points_2.csv', \
         config_file = './config/example_config_with_infection.json'):
 
         """
@@ -202,20 +202,34 @@ class Simulation():
         Updates self.pop_config.sub_population array column 9 which refers to the disease progression
 
         """
-        if disease_state == None:
+        print("agent_index_in_sub_population_arr",agent_index_in_sub_population_arr)
+        print("disease_state", disease_state)
+        if disease_state is None:
+            print("self.pop_config.sub_population[agent_index_in_sub_population_arr,10]", self.pop_config.sub_population[agent_index_in_sub_population_arr,10])
+            print(self.pop_config.sub_population[agent_index_in_sub_population_arr,10].shape)
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 0
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 0
         elif disease_state == 'asymptomatic':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 1
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 1
         elif disease_state == 'mild':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 2
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 2
         elif disease_state == 'hospitalised':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 3
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 3
         elif disease_state == 'ventilated':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 4
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 4
         elif disease_state == 'recovered':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 5
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 5
         elif disease_state == 'dead':
             self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 6
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 6
+        else:
+            self.pop_config.sub_population[agent_index_in_sub_population_arr,10] = 7
+            self.pop_config.point_plots_matrix[agent_index_in_sub_population_arr,2] = 7
 
 
 
@@ -236,10 +250,13 @@ class Simulation():
             print("Age of agent", agent.age)
             # attach infection instance to infected agents. The infection instance determines the infection progression for each agent
             if self.event_json["infection_criteria"] and agent.current_state == 1:
+                # # attach disease progression object to agent returns agent.disease_progression_state
                 agent.attach_infection_obj(self.infection_obj)
-                # attach disease progression object to agent
-                self.pop_config.sub_population[agent.id,10] = agent.infection_update(self.event_json)
-                agent.disease_progression_state
+                # Update agent.disease_progression_state
+                agent.infection_update(self.event_json)
+                # Update disease state in sub_population array
+                self.update_subpopulations_disease_state_col(agent.disease_progression_state, agent_index_in_sub_population_arr = int(agent.id))
+                print("infection state =", self.pop_config.sub_population[int(agent.id),10] )
 
             # Load events into Tracker class
             if agent.tracker_instance is None:

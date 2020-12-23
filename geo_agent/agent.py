@@ -119,6 +119,9 @@ class Agent():
         for key, infection in infection_config_obj.items():
             # extract infection eligibility
             infection_eligibility_obj = infection_config_obj[key].agent_eligibility
+            print("infection_eligibility_obj", infection_eligibility_obj)
+            print("jsonLogic(infection_eligibility_obj, self.__dict__)",jsonLogic(infection_eligibility_obj, self.__dict__))
+            print(self.__dict__["disease_progression_state"], self.__dict__["current_state"])
             infection_instance = infection_config_obj[key]
 
 
@@ -159,9 +162,11 @@ class Agent():
                 self.disease_progression_state = infection["timer_objects"][0]["state"]
                 # First time disease_progression_obj is processed by track_disease_progression
                 self.track_disease_progression(self.current_infections[infection["description"]].disease_progression_obj)
+                print("disease progression state", self.disease_progression_state)
                 return self.disease_progression_state
             else:
                 self.track_disease_progression(self.current_infections[infection["description"]].disease_progression_obj)
+                print("disease progression state",self.disease_progression_state)
                 return self.disease_progression_state
 
 

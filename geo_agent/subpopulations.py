@@ -105,7 +105,7 @@ class Load_populations(Configuration):
         # self.point_plots_matrix[:,1] = ["sample"] * self.pop_size
 
 
-    def random_assign_zero_ones(self, list_of_values = [0, 1, 2, 3], array_size= 1000, prob_list = [.7, .3, 0, 0]):
+    def random_assign_zero_ones(self, list_of_values = [0, 1, 2, 3], array_size= 1000, prob_list = [0, 1, 0, 0]):
         """
         generates numpy array of zeros and ones at a defined ratio specified by prob_list argument [proportion of zeros (healthy), proportion of ones (infected), proportion of twos (recovered), proportion of threes (dead)]
 

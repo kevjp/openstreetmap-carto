@@ -64,7 +64,7 @@
         "probability_initialisation_functions" : null,
         "probability_sampling_functions" :
         {
-            "sampling_event_occuring" : {"function" : "determine_time_at_event_hospitalised", "kwargs" : {"disease_description" : "COVID19", "states": ["aymptomatic", "hospitalised", "ventilated"]}, "return" : "time_at_event"}
+            "sampling_event_occuring" : {"function" : "determine_time_at_event_hospitalised", "kwargs" : {"disease_description" : "COVID19", "states": ["asymptomatic", "hospitalised", "ventilated"]}, "return" : "time_at_event"}
         },
         "agent_eligibility" : {"and" : [{"==" : [{"var" : "disease_progression_state"}, "hospitalised"]}, {"<=" : [{"var" : "event_history_dict.go_to_hospital.time_before_event_repeat"}, 0 ]}]},
         "event_eligibility" : {"==" : [{"var" : "status"}, 1]},
@@ -98,7 +98,7 @@
         "infect" : {"function" : "infect", "kwargs" : {"p" : 0.5, "infection_distance" : 100}},
         "infectiousness" : {"function" : "infectiousness"},
         "disease_progression" : {"function" : "disease_progression_func"},
-        "timer_objects" :   [{"state": "aymptomatic", "days_in_state" : {"function" : "gauss_distribution_generator", "kwargs" : {"start" : 0, "stop" : 250, "mean" : 14, "sd" : 7, "size" : 1000, "conversion_factor" : 1440, "tstep_units" : "m"} }, "probability_worstens" : {"<=": [{"var" : "p"},0.8]}, "criteria_change_state" : {">=" : [{"var" : "infection_time"}, "asymptomatic_recovery_days"]}, "label_change" : "mild", "action_function" : "go_home"},
+        "timer_objects" :   [{"state": "asymptomatic", "days_in_state" : {"function" : "gauss_distribution_generator", "kwargs" : {"start" : 0, "stop" : 250, "mean" : 14, "sd" : 7, "size" : 1000, "conversion_factor" : 1440, "tstep_units" : "m"} }, "probability_worstens" : {"<=": [{"var" : "p"},0.8]}, "criteria_change_state" : {">=" : [{"var" : "infection_time"}, "asymptomatic_recovery_days"]}, "label_change" : "mild", "action_function" : "go_home"},
                             {"state": "mild", "days_in_state" : {"function" : "gauss_distribution_generator", "kwargs" : {"start" : 0, "stop" : 250, "mean" : 14, "sd" : 7, "size" : 1000, "conversion_factor" : 1440, "tstep_units" : "m"}}, "probability_worstens" : {"<=": [{"var" : "p"},0.1]}, "criteria_change_state" : {">=" : [{"var" : "infection_time"}, "mild_recovery_days"]}, "label_change" : "hospitalised", "action_function" : "go_to_hospital"},
                             {"state": "hospitalised", "days_in_state" : {"function" : "gauss_distribution_generator", "kwargs" : {"start" : 0, "stop" : 250, "mean" : 28, "sd" : 7, "size" : 1000, "conversion_factor" : 1440, "tstep_units" : "m"}}, "probability_worstens" : {"<=": [{"var" : "p"},0.5]}, "criteria_change_state" : {">=" : [{"var" : "infection_time"}, "hospitalised_recovery_days"]}, "label_change" : "ventilated", "action_function" : null},
                             {"state": "ventilated", "days_in_state" : {"function" : "gauss_distribution_generator", "kwargs" : {"start" : 0, "stop" : 250, "mean" : 84, "sd" : 28, "size" : 1000, "conversion_factor" : 1440, "tstep_units" : "m"}}, "probability_worstens" : {"<=": [{"var" : "p"},0.5]}, "criteria_change_state" : {">=" : [{"var" : "infection_time"}, "ventilation_recovery_days"]}, "label_change" : "death", "action_function" : "removed"}
